@@ -9,10 +9,14 @@ import SwiftUI
 
 @main
 struct DailySportNewsApp: App {
+    
+    @StateObject private var sportNewsListViewModel = SportNewsListViewModel()
+
     var body: some Scene {
+        
         WindowGroup {
             NavigationView {
-                SportNewsListView()
+                SportNewsListView().environmentObject(sportNewsListViewModel)
             }
         }
     }

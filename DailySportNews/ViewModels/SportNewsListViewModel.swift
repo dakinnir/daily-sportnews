@@ -7,18 +7,80 @@
 
 import Foundation
 import SwiftyJSON
+import SwiftUI
 
 class SportNewsListViewModel: ObservableObject {
     
     @Published var sportNewsArticles = [Article]()
     
+    
     init () {
         loadNewsDataResponse()
     }
     
-    func loadNewsDataResponse() {
+    enum Country: String, CaseIterable {
+        case italy = "Italy"
+        case unitedstates = "United States"
+        case unitedkingdom = "United Kingdom"
+        case mexico = "Mexico"
+        case china = "China"
+        case canada = "Canada"
+        case france = "France"
+        case nigeria = "Nigeria"
+    }
+
+    var currentCountry: Country = .unitedstates
+    
+    var currentCountryString: String {
+        return currentCountry.rawValue
+    }
+    
+    @Published var countriesListIsPresent: Bool = false
+    
+    @Published var currentCountryCode: String = "us"
+    
+    
+    func updateCurrentCountryCode(country: Country) {
+        switch country {
+        case .unitedstates:
+            currentCountry = country
+            currentCountryCode = "us"
+        case .unitedkingdom:
+            currentCountry = country
+            currentCountryCode = "gb"
+        case .italy:
+            currentCountry = country
+            currentCountryCode = "it"
+        case .mexico:
+            currentCountry = country
+            currentCountryCode = "mx"
+        case .china:
+            currentCountry = country
+            currentCountryCode = "cn"
+        case .canada:
+            currentCountry = country
+            currentCountryCode = "ca"
+        case .france:
+            currentCountry = country
+            currentCountryCode = "fr"
+        case .nigeria:
+            currentCountry = country
+            currentCountryCode = "ng"
+        }
         
-        let urlString = "https://newsapi.org/v2/top-headlines?country=us&category=sports&apiKey=9af8ef432f1040fda6e67488688748d7"
+        
+    }
+    
+    func toggleCountriesList() {
+        withAnimation(.easeInOut) {
+            countriesListIsPresent.toggle()
+        }
+    }
+    
+    
+    func loadNewsDataResponse() {
+        sportNewsArticles = []
+        let urlString = "https://newsapi.org/v2/top-headlines?country=\(currentCountryCode )&category=sports&apiKey=9af8ef432f1040fda6e67488688748d7"
         
         let urlSource = URL(string: urlString)
         let session = URLSession.init(configuration: .default)
@@ -41,6 +103,7 @@ class SportNewsListViewModel: ObservableObject {
                 print(source)
 
                 DispatchQueue.main.async {
+                    
                     self.sportNewsArticles.append(
                         Article(
                             name: source,

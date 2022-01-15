@@ -8,13 +8,34 @@
 import SwiftUI
 
 struct CountryFilterListView: View {
+    @EnvironmentObject private var sportNewsListViewModel: SportNewsListViewModel
+
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        List {
+            ForEach(SportNewsListViewModel.Country.allCases, id:\.self) { country in
+                Button {
+                    sportNewsListViewModel.updateCurrentCountryCode(country: country)
+                    sportNewsListViewModel.loadNewsDataResponse()
+                    sportNewsListViewModel.countriesListIsPresent.toggle()
+                } label: {
+                    HStack(spacing: 8) {
+                        Image(country.rawValue)
+                            .resizable()
+                            .frame(width: 30, height: 30)
+                        Text(country.rawValue)
+                            .font(.subheadline)
+                    }
+                }
+                .padding(.vertical, 4)
+                .listRowBackground(Color.clear)
+            }
+        }
+        .listStyle(.plain)
     }
 }
 
 struct CountryFilterListView_Previews: PreviewProvider {
     static var previews: some View {
-        CountryFilterListView()
+        CountryFilterListView().environmentObject(SportNewsListViewModel())
     }
 }
