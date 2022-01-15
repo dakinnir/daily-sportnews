@@ -1,5 +1,5 @@
 //
-//  NewsArticle.swift
+//  Article.swift
 //  DailySportNews
 //
 //  Created by Daniel Akinniranye on 1/14/22.
@@ -7,7 +7,8 @@
 
 import Foundation
 
-struct NewsArticle: Hashable {
+struct Article: Hashable {
+    let name: String
     let author: String
     let title: String
     let desription: String
@@ -15,3 +16,4 @@ struct NewsArticle: Hashable {
     let urlToImage: String
     let publishedAt: String
 }
+

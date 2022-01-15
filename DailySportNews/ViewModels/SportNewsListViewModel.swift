@@ -10,7 +10,7 @@ import SwiftyJSON
 
 class SportNewsListViewModel: ObservableObject {
     
-    @Published var sportNewsArticles = [NewsArticle]()
+    @Published var sportNewsArticles = [Article]()
     
     init () {
         loadNewsDataResponse()
@@ -33,15 +33,17 @@ class SportNewsListViewModel: ObservableObject {
             for article in jsonData["articles"] {
                 let author = article.1["author"].stringValue
                 let title = article.1["title"].stringValue
-                print(title)
                 let description = article.1["description"].stringValue
                 let url = article.1["url"].stringValue
                 let urlToImage = article.1["urlToImage"].stringValue
                 let publishedAt = article.1["publishedAt"].stringValue
-                
+                let source = article.1["source"]["name"].stringValue
+                print(source)
+
                 DispatchQueue.main.async {
                     self.sportNewsArticles.append(
-                        NewsArticle(
+                        Article(
+                            name: source,
                             author: author,
                             title: title,
                             desription: description,
